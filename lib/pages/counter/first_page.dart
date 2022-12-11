@@ -30,6 +30,8 @@ class FirstPage extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () => counterCubit.increase(),
+          // TODO: Test lấy Bloc ở cùng một context
+          // onPressed: () => BlocProvider.of<CounterCubit>(context).increase(),
         ),
       ),
     );
