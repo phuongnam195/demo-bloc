@@ -24,7 +24,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     try {
       final result = await Repository.searchMobileMember(event.keyword);
 
-      emit(SearchSuccess(result));
+      // emit(SearchSuccess(result));
 
       // // TODO: Test emit 2 state giống nhau
       // final state = SearchSuccess(result);
@@ -32,10 +32,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       // await Future.delayed(const Duration(seconds: 1));
       // emit(state);
 
-      // // TODO: Test emit 2 state cùng dữ liệu
-      // emit(SearchSuccess(result));
-      // await Future.delayed(const Duration(seconds: 1));
-      // emit(SearchSuccess(result));
+      // TODO: Test emit 2 state cùng dữ liệu
+      emit(SearchSuccess(result));
+      await Future.delayed(const Duration(seconds: 1));
+      emit(SearchSuccess(result));
     } catch (e) {
       emit(SearchError('$e'));
     }

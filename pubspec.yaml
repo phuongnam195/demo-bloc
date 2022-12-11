@@ -13,6 +13,7 @@ dependencies:
   flutter_bloc: ^8.1.1
   rxdart: ^0.27.7
   bloc_test: ^9.1.0
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:
