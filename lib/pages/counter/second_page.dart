@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SecondPage extends StatelessWidget {
-  const SecondPage({super.key});
+  final CounterCubit counterCubit;
+
+  const SecondPage(this.counterCubit, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +13,7 @@ class SecondPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Counter (2)')),
       body: Center(
         child: BlocConsumer<CounterCubit, int>(
+          bloc: counterCubit,
           listenWhen: (prev, curr) => curr > 20,
           listener: (ctx, state) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -28,7 +31,7 @@ class SecondPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          BlocProvider.of<CounterCubit>(context).increase();
+          counterCubit.increase();
         },
       ),
     );

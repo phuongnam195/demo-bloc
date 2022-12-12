@@ -10,50 +10,47 @@ class FirstPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final counterCubit = CounterCubit();
-    return BlocProvider(
-      create: (_) => counterCubit,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Counter (1)'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const SearchPage()),
-                );
-              },
-            )
-          ],
-        ),
-        body: const _Body(),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () => counterCubit.increase(),
-          // TODO: Test lấy Bloc ở cùng một context
-          // onPressed: () => BlocProvider.of<CounterCubit>(context).increase(),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Counter (1)'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const SearchPage()),
+              );
+            },
+          )
+        ],
+      ),
+      body: _Body(counterCubit),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () => counterCubit.increase(),
+        // TODO: Test lấy Bloc ở cùng một context
+        // onPressed: () => BlocProvider.of<CounterCubit>(context).increase(),
       ),
     );
   }
 }
 
 class _Body extends StatelessWidget {
-  const _Body({Key? key}) : super(key: key);
+  final CounterCubit counterCubit;
+
+  const _Body(this.counterCubit, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: BlocListener<CounterCubit, int>(
+        bloc: counterCubit,
         listenWhen: (prev, curr) => curr == 10,
         // listenWhen: (prev, curr) => curr >= 10, // TODO: Test listen ở màn hình cũ
         listener: (ctx, state) {
           Navigator.of(ctx).push(
             MaterialPageRoute(
-              builder: (_) => BlocProvider.value(
-                value: BlocProvider.of<CounterCubit>(context),
-                child: const SecondPage(),
-              ),
+              builder: (_) => SecondPage(counterCubit),
             ),
           );
 
@@ -69,7 +66,7 @@ class _Body extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             BlocBuilder<CounterCubit, int>(
-              bloc: context.read<CounterCubit>(),
+              bloc: counterCubit,
               builder: (ctx, state) => Text(
                 '$state',
                 style: const TextStyle(fontSize: 40),
@@ -77,6 +74,7 @@ class _Body extends StatelessWidget {
             ),
             const SizedBox(height: 15),
             BlocSelector<CounterCubit, int, bool>(
+              bloc: counterCubit,
               selector: (count) => count % 5 == 0,
               builder: (ctx, state) => Container(
                 width: 80,
